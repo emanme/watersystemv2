@@ -11,6 +11,18 @@
                 <button class="btn d-lg-none btn-primary btn-sm mt-2 me-1 search mb-2" style="height: 35px !important;"><i data-feather="search" class="feather-18"></i></button>
                 <button class="btn d-lg-none btn-sm border btn-white mt-2 close mb-2 me-1" style="height: 35px !important;"><i data-feather="x" class="feather-20"></i></button>
             </div>
+            @else
+            @if($notif > 0)
+            <div class="float-start float-md-end me-2" onclick='location.href=`{{ route("admin.unread") }}`'>
+                <div class="btn bg-light position-relative pe-2">
+                    <i data-feather="bell"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ $notif }}
+                        <span class="visually-hidden">Unread meter</span>
+                    </span>
+                </div>
+            </div>
+            @endif
             @endif
         </div>
         <nav id="navbar_main" class="mobile-offcanvas navbar navbar-expand-lg navbar-dark bg-white">
@@ -28,7 +40,7 @@
                         <button class="btn-close float-end"></button>
                     </div>
                 </div>
-                <a class="navbar-brand text-secondary pb-2 border-md-bottom border-lg-2 border-secondary" href="#" style="font-size: 18px !important;"><strong>Macrohon Municipal Waterworks</strong></a>
+                <a class="navbar-brand text-secondary pb-2 border-md-bottom border-lg-2 border-secondary" href="#" style="font-size: 18px !important;"><strong>MMWS</strong></a>
 
                 <ul class="navbar-nav ms-lg-3">
                     <li class="nav-item my-md-0 my-1"><a class="nav-link text-secondary" href="{{ route('admin.home') }}"><i data-feather="home" class="feather-18 me-2"></i> Home Page </a></li>
