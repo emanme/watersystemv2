@@ -1,0 +1,21 @@
+[17-Dec-2023 09:21:33 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[17-Dec-2023 09:26:10 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[17-Dec-2023 09:30:31 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[17-Dec-2023 09:30:33 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[17-Dec-2023 09:35:13 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[17-Dec-2023 09:35:24 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[17-Dec-2023 09:35:26 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 04:54:19 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 04:58:01 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:02:11 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:02:13 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:05:47 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:05:47 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:07:58 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:13:50 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:13:50 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[30-Dec-2023 05:15:13 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[14-Jan-2024 05:23:45 UTC] PHP Fatal error:  Out of memory (allocated 8388608) (tried to allocate 32768 bytes) in /home/southernleyteorg/watersystemv2_app/vendor/opis/closure/src/SerializableClosure.php on line 380
+[22-Jan-2024 09:17:07 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[22-Jan-2024 09:17:07 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
+[22-Jan-2024 09:49:44 Asia/Manila] PHP Warning:  Missing boundary in multipart/form-data POST data in Unknown on line 0
