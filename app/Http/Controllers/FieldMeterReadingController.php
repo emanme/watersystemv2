@@ -210,4 +210,13 @@ class FieldMeterReadingController extends Controller
         $transactions = Transaction::create($fillable);
         return response()->json(['created' => true, 'data'=>$fillable]);
     }
+    public function api_store(Request $request)
+    {
+        $requestData = json_decode($request->getContent(), true);
+         
+        $response = $this->store($requestData);
+
+        // Return the response from store function
+        return $response;
+    }
 }
