@@ -6,37 +6,28 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Transaction;
-use App\Classes\Facades\UserTypeHelper;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
-
-    public static $ADMIN=1;
-    public static $CASHIER=2;
-    public static $READER=3;
-    public static $BLDG_INSPECTOR=4;
-    public static $WATERWORKS_INSPECTOR=5;
-    public static $ENGINEER=6;
-
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
-       'username',
+        'email',
         'password',
-        'role'
+        'username'
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -44,84 +35,11 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public static function validRoles()
-    {
-        return [
-            '1'=>'Admin',
-            '2'=>'Cashier',
-            '3'=>'Meter Reader',
-            '4'=>'Building Inspector',
-            '5'=>'Waterworks Inspector',
-            '6'=>'Municipal Engineer',
-        ];
-    }
-
-    public static function defaultPassword()
-    {
-        return '12345678';
-    }
-
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'user_id');
-    }
-
-    public function isCashier()
-    {
-        return $this->role==2;
-    }
-
-    public function isReader()
-    {
-        return $this->role==3;
-    }
-
-    public function isAdmin()
-    {
-        return $this->role==1;
-    }
-
-    public function isBuildingInspector()
-    {
-        return $this->role==4;
-    }
-
-    public function isWaterworksInspector()
-    {
-        return $this->role==5;
-    }
-
-    public function isEngineer()
-    {
-        return $this->role==self::$ENGINEER;
-    }
-
-    public function username()
-    {
-        return $this->username;
-    }
-
-    public function name()
-    {
-        return $this->name;
-    }
-
-    public function user_role()
-    {
-        return self::validRoles()[$this->role];
-    }
-
-    public static function count()
-    {
-        return self::all()->count();
-    }
 }

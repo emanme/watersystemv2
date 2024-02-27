@@ -2,17 +2,6 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\AllowedAccess;
-use App\Http\Middleware\AllowedAccessGroupAdmin;
-use App\Http\Middleware\AllowedAccessGroupMeterReader;
-use App\Http\Middleware\EnsureIsAdmin;
-use App\Http\Middleware\IsCashier;
-use App\Http\Middleware\RestricCashier;
-use App\Http\Middleware\AllowedBldgInspectorAccess;
-use App\Http\Middleware\AllowedAdminCashierAccess;
-use App\Http\Middleware\AllowedRole;
-use App\Http\Middleware\AllowedWaterworksInspector;
-use App\Http\Middleware\AllowedCashierAccess;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -22,7 +11,7 @@ class Kernel extends HttpKernel
      *
      * These middleware are run during every request to your application.
      *
-     * @var array
+     * @var array<int, class-string|string>
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
@@ -37,7 +26,7 @@ class Kernel extends HttpKernel
     /**
      * The application's route middleware groups.
      *
-     * @var array
+     * @var array<string, array<int, class-string|string>>
      */
     protected $middlewareGroups = [
         'web' => [
@@ -51,6 +40,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -61,7 +51,7 @@ class Kernel extends HttpKernel
      *
      * These middleware may be assigned to groups or used individually.
      *
-     * @var array
+     * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -73,14 +63,5 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        // 'access.authorize'=>EnsureIsAdmin::class,
-        // 'auth.restrict-cashier'=>RestricCashier::class,
-        // 'auth.allowed-user' => AllowedAccessGroupAdmin::class,
-        // 'auth.allowed-reader' => AllowedAccessGroupMeterReader::class,
-        // 'auth.allowed-bldg-inspector' => AllowedBldgInspectorAccess::class,
-        // 'auth.allowed-admin-cashier-access' => AllowedAdminCashierAccess::class,
-        // 'auth.allowed-waterworks-access' => AllowedWaterworksInspector::class,
-        // 'auth.allowed-cashier-access' => AllowedCashierAccess::class,
-        'allowed'=>AllowedRole::class
     ];
 }

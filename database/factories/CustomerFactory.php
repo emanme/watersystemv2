@@ -2,25 +2,12 @@
 
 namespace Database\Factories;
 
-use App\Classes\Facades\AccountNumber;
-use App\Classes\Facades\BarangayData;
-use App\Classes\Facades\FakeCustomerData;
-use App\Exceptions\BarangayDoesNotExistException;
 use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Stringable;
+use Illuminate\Support\Str;
 
 class CustomerFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
-    protected $model = Customer::class;
-
-    protected $counter=1;
-
     /**
      * Define the model's default state.
      *
@@ -28,23 +15,50 @@ class CustomerFactory extends Factory
      */
     public function definition()
     {
-        $currentYear=date("Y");
-        $customerData=[ 
-            'account_number'=>"020-$currentYear-".str_pad($this->counter++,3,'0',STR_PAD_LEFT),
-            'firstname'=>$this->faker->firstName,
-            'middlename'=>$this->faker->lastName,
-            'lastname'=>$this->faker->lastName,
-            'civil_status'=>FakeCustomerData::civilStatus(),
-            'purok'=>'Purok 1',
-            'barangay'=>'Amparo',
-            'contact_number'=>'09757375747',
-            'connection_type'=>FakeCustomerData::connectionType(),
-            'connection_status'=>FakeCustomerData::connectionStatus(),
-            'purchase_option'=>'cash',
-            'meter_number'=>'123'
+        $gender = $this->faker->randomElement(['male', 'female']);
+        $firstName = $this->faker->firstName($gender);
+        $lastName = $this->faker->lastName;
+        $middleName = $this->faker->optional()->firstName($gender);
+        $type = $this->faker->randomElement(['residential', 'commercial']);
+        $barangay=$this->faker->randomElement(['Agay-ay',
+        'Basak',
+        'Bobon A',
+        'Bobon B',
+        'Dayanog',
+        'Garrido',
+        'Minoyho',
+        'Osao',
+        'Pong-oy',
+        'San Jose',
+        'San Roque',
+        'San Vicente',
+        'Santa Cruz',
+        'Santa Filomena',
+        'Santo Niño',
+        'Somoje',
+        'Sua',
+        'Timba']);
+        $establishment_name=null;
+        if($type=='commercial'){
+            $establishment_name= $this->faker->optional()->company;
+        }
+
+        return [
+            'account_number' => $this->faker->unique()->numerify('####'),
+            'firstname' => $firstName,
+            'middlename' => $middleName,
+            'lastname' => $lastName,
+            'civil_status' => $this->faker->randomElement(['single', 'married', 'widowed']),
+            'purok' => $this->faker->numerify('Purok ##'),
+            'setio' => $this->faker->numerify('Setio ##'),
+            'barangay' => $barangay,
+            'contact_number' => $this->faker->numerify('09#########'),
+            'type' =>$type,
+            'status' => $this->faker->randomElement(['active', 'disconnected', 'cut']),
+            'establishment_name' =>$establishment_name,
+            'latitude' =>$this->faker->latitude(10.2645300, 10.26457600),
+            'longitude' =>$this->faker->longitude(125.1707716, 125.1751918),
+            'meter_number' => $this->faker->numerify('M####'),
         ];
-        return $customerData;
-      
-        
-    }
+    }  
 }

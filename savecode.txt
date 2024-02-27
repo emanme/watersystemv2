@@ -1,0 +1,31 @@
+VIEW - HTML
+resources/views/
+
+MODEL
+app\Models\User.php
+
+
+ROUTES - URL
+routes/web.php
+
+
+CONTROLLER  Function
+app\Http\Controllers
+
+DATABASE MIGRATION 
+database\migrations
+
+
+
+
+
+
+
+Code for creating Controllers
+php artisan make:controller UserController
+
+creating/updating database
+php artisan migrate
+
+create new table in database 
+php artisan make:migration create_account_table

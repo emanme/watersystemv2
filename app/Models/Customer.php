@@ -4,103 +4,37 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-use App\Models\Service;
-use App\Models\Transaction;
-use App\Models\Payments;
-use App\Models\PaymentWorkOrder;
 
 class Customer extends Model
 {
     use HasFactory;
 
-    protected $primaryKey="account_number";
-    public $incrementing=false;
-    protected $fillable=[
+    protected $fillable = [
         'account_number',
         'firstname',
         'middlename',
         'lastname',
         'civil_status',
         'purok',
+        'setio',
         'barangay',
         'contact_number',
-        'connection_type',
-        'connection_status',
-        'purchase_option',
-        'org_name',
-        'meter_number'
+        'type',
+        'status',
+        'establishment_name',
+        'meter_number',
+        'latitude',
+        'longitude',
     ];
 
-    public const ACTIVE = "active";
-    public const INACTIVE = "inactive";
-
-    public function isOrgAccount()
+    public function scopeFilter($query, array $filters)
     {
-        return $this->org_name?true:false;
+        if ($filters['search'] ?? false) {
+            $query->where('firstname', 'like', '%' . request('search') . '%')->orWhere('lastname', 'like', '%' . request('search') . '%')->orWhere('middlename', 'like', '%' . request('search') . '%')->orWhere('establishment_name', 'like', '%' . request('search') . '%')->orWhere('account_number', 'like', '%' . request('search') . '%');
+        }
     }
-
-    public function civilStatus()
+    public static function checkCustomerByAccountNumber($accountNumber)
     {
-        return Str::title($this->civil_status);
-    }
-
-    public function fullname()
-    {
-        $firstname=Str::title($this->firstname);
-        $lastname=Str::title($this->lastname);
-        return "{$firstname} {$lastname}";
-    }
-    public function address()
-    {
-        return "{$this->purok}, {$this->barangay}";
-    }
-    public function account()
-    {
-        return "{$this->account_number}";
-    }
-
-    public function connectionType()
-    {
-        return Str::title($this->connection_type);
-    }
-
-    public function purchaseOption()
-    {
-        return Str::title($this->purchase_option);
-    }
-
-    public function services()
-    {
-        return $this->hasMany(Service::class);
-    }
-
-    public function workOrderPayment()
-    {
-        return $this->hasMany(PaymentWorkOrder::class);
-    }
-
-    public function payments()
-    {
-        return $this->hasMany(Payments::class, 'transaction_id');
-    }
-
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'customer_id')->orderByDesc('created_at');
-    }
-
-    public function balance()
-    {
-        return $this->hasMany(Transaction::class, 'customer_id')->orderByDesc('created_at')->first();
-    }
-
-    public function hasActiveConnection()
-    {
-        return $this->connection_status==="active";
-    }
-
-    public static function count(){
-        return self::all()->count();
+        return self::where('account_number', $accountNumber)->exists();
     }
 }
