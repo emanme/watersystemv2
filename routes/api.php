@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\StudentController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,8 +13,7 @@ use App\Http\Controllers\StudentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/students', [StudentController::class, 'index']);
- Route::get('/students', [StudentController::class, 'index']);
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
