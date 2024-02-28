@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\APIController;
 
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\FieldMeterReadingController;
 
 /*
@@ -30,15 +31,9 @@ use App\Http\Controllers\FieldMeterReadingController;
 
 */
 
-Route::post('/waterbill/process', [FieldMeterReadingController::class, 'api_store']);
-Route::get('/waterbill', [FieldMeterReadingController::class, 'api_store2']);
-Route::post('/students', [StudentController::class, 'index']);
-
+Route::post('/waterbill/process', [APIController::class, 'save_reading']);
+ 
+ 
 Route::get('/students', [StudentController::class, 'index']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-
-    return $request->user();
-
-});
 
