@@ -2,116 +2,50 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Facades\CustomerDataHelper;
+use App\Http\Requests\StoreCustomerRequest;
 use App\Models\Customer;
+use App\Models\Transaction;
+use App\Services\AccountNumberService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
-    //
-    public function costumers()
+    private function getOnlyTransaction($customerId, $requestData)
     {
-        return view('customer.customers', [
-            'title' => "Customers",
-            'customers' => Customer::latest()->get()
+        $transaction = Arr::only($requestData, ['reading_meter', 'balance', 'reading_date']);
+        $transaction = Arr::add($transaction, 'billing_meter_ips', $requestData['billing_meter_ips'] ?? '0.00');
+        $transaction = Arr::add($transaction, 'billing_amount', $requestData['balance'] ?? '0.00');
+        $transaction = Arr::add($transaction, 'billing_surcharge', '0.00');
+        $transaction = Arr::add($transaction, 'billing_total', $requestData['balance'] ?? '0.00');
+        $transaction = Arr::add($transaction, 'reading_consumption', '0');
+        $transaction = Arr::add($transaction, 'period_covered', 'Beginning Balance');
+        $transaction = Arr::add($transaction, 'customer_id', $customerId);
+        $transaction = Arr::add($transaction, 'user_id', Auth::id());
+        $transaction = Arr::add($transaction, 'posted_by', Auth::id());
+        return $transaction;
+    }
+
+    public function showAll()
+    {
+        $customers=Customer::paginate(10);
+        return view('pages.customers-list',['customers'=>$customers]);
+    }
+
+    public function store(StoreCustomerRequest $request)
+    {
+       $normalizedData=CustomerDataHelper::normalize($request->all());
+       $normalizedData['meter_number']=$request->meter_serial_number;
+        $customer = Customer::create($normalizedData);
+        $transactions = $this->getOnlyTransaction($customer->account_number, $request->all());
+        Transaction::create($transactions);
+        return response()->json([
+            'created'=>true
         ]);
     }
-    public function create()
-    {
-        return view('customer.create', []);
-    }
-    public function store(Request $request)
-    {
-        $accoutNumber = Self::generateAccountNumber();
 
-        $formFields = $request->validate([
-            'meter_number' => 'required',
-            'firstname' => 'required',
-            'middlename' => 'nullable', // Add your validation rules for middlename
-            'lastname' => 'required',
-            'civil_status' => 'required|in:single,married,widowed',
-            'purok' => 'nullable', // Add your validation rules for purok
-            'setio' => 'nullable', // Add your validation rules for setio
-            'barangay' => 'required',
-            'contact_number' => 'required|numeric', // Adjust the validation rule based on your requirements
-            'type' => 'required|in:residential,commercial', // Updated validation for 'type'
-            'status' => 'required|in:active,disconnected,cut', // Updated validation for 'status'
-            'establishment_name' => 'nullable', // Add your validation rules for establishment_name
-
-        ]);
-        $formFields['account_number'] = $accoutNumber;
-        $formFields['longitude'] = '';
-        $formFields['latitude'] = '';
-
-        Customer::create($formFields);
-        //dd($request);
-        //return redirect('/customers');
-        return redirect()->route('customers')->with('message', 'Customer created successfully');
-    }
-    function generateAccountNumber()
-    {
-        $year = date("Y");
-        $month = date("m");
-        $number = mt_rand(001010, 999999); // better than rand()
-        $number = $year . $month . $number;
-        // call the same function if the barcode exists already
-        if (Customer::checkCustomerByAccountNumber($number)) {
-            return Self::generateAccountNumber();
-        }
-
-        // otherwise, it's valid and can be used
-        return $number;
-    }
-
-    public function getCustomers()
-    {
-
-        return [
-            'title' => "Customers",
-            'customers' => Customer::whereIn('status', ['active', 'disconnected'])
-                ->filter(request(['search']))
-                ->latest()
-                ->get()
-        ];
-    }
-    public function costumersNotCut() // customers who are ACTIVE & DISCONNECTED only
-    { //change this referrence in Route web.php
-
-        return view('customer.customers', Self::getCustomers());
-    }
-    public function edit(Customer $customer)
-    {
-
-        return view('customer.edit', [
-            'title' => "Customers",
-            'customer' => $customer
-        ]);
-    }
-    //Update Customer
-    public function update(Request $request, Customer $customer)
-    {
-        $formFields = $request->validate([
-
-            'firstname' => 'required',
-            'middlename' => 'nullable', // Add your validation rules for middlename
-            'lastname' => 'required',
-            'civil_status' => 'required|in:single,married,widowed',
-            'purok' => 'nullable', // Add your validation rules for purok
-            'setio' => 'nullable', // Add your validation rules for setio
-            'barangay' => 'required',
-            'contact_number' => 'required|numeric', // Adjust the validation rule based on your requirements
-            'type' => 'required|in:residential,commercial', // Updated validation for 'type'
-            'status' => 'required|in:active,disconnected,cut', // Updated validation for 'status'
-            'establishment_name' => 'nullable', // Add your validation rules for establishment_name
-            'latitude' => 'nullable', // Adjust the validation rule based on your requirements
-            'longitude' => 'nullable',
-        ]);
-
-        // $customer = Customer::findOrFail($customer->id); // Find the customer by ID
-
-        $customer->update($formFields); // Update the customer with the validated form fields
-
-        return redirect()->back()->with('message', 'Customer updated successfully'); // Redirect back with a success message
-
-        // return back();
-    }
+    
 }

@@ -1,3 +1,12 @@
-php artisan route:clear
+Required PHP 7.4 same as SERVER
+https://sourceforge.net/projects/xampp/files/XAMPP%20Windows/7.4.19/xampp-portable-windows-x64-7.4.19-0-VC15-installer.exe/download?use_mirror=master&use_mirror=master&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fxampp%2Ffiles%2FXAMPP%2520Windows%2F7.4.19%2F
+
+remove vendor
+
 create .env file
+
+npm i
+composer install
+
 generate KEY
+artisan key:generate
